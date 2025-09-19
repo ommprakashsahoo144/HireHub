@@ -1,0 +1,119 @@
+/* Mobile-first responsive design */
+body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+/* Improved touch targets for mobile */
+.btn, .form-control, .form-select {
+  min-height: 44px;
+}
+
+/* Better spacing for mobile */
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Improved card design for mobile */
+.job-card {
+  transition: all 0.2s ease;
+  border-radius: 12px !important;
+}
+
+.job-card:active {
+  transform: scale(0.98);
+}
+
+/* Modal improvements for mobile */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Form improvements */
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* Button improvements */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Navigation improvements for mobile */
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem;
+}
+
+/* Better spacing for mobile screens */
+.py-4 {
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+/* Text truncation for mobile - FIXED */
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3em; /* Fallback for browsers that don't support line-clamp */
+}
+
+/* Hide scrollbars but maintain functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 576px) {
+  .display-5 {
+    font-size: 2rem !important;
+  }
+  
+  .lead {
+    font-size: 1rem !important;
+  }
+  
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden;
+}
