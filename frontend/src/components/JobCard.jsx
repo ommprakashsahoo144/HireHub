@@ -33,14 +33,16 @@ export default function JobCard({ job, onSelectJob, onApply }) {
           <Badge bg="light" text="dark" className="px-2 py-1 small">
             {job.type}
           </Badge>
-          {job.remote && (
+          {job.location.toLowerCase().includes('remote') && (
             <Badge bg="light" text="dark" className="px-2 py-1 small">
               Remote
             </Badge>
           )}
-          <Badge bg="light" text="dark" className="px-2 py-1 small">
-            {job.level}
-          </Badge>
+          {job.level && (
+            <Badge bg="light" text="dark" className="px-2 py-1 small">
+              {job.level}
+            </Badge>
+          )}
         </div>
 
         <p className="text-truncate-2 text-muted small mb-2">

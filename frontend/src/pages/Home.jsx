@@ -1,49 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import BusinessIcon from "@mui/icons-material/Business";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
-import jobs from "../data/jobs";
 import JobList from "../components/JobList";
 import HeroSearch from "../components/HeroSearch";
 import ApplyModal from "../components/ApplyModal";
+import { fetchJobs } from "../api/mockApi";
 
 export default function Home() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showApply, setShowApply] = useState(false);
-  const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [displayCount, setDisplayCount] = useState(3);
+  const [loading, setLoading] = useState(true);
+
+  // Load initial jobs
+  useEffect(() => {
+    fetchJobs().then(jobs => {
+      setFilteredJobs(jobs);
+      setLoading(false);
+    });
+  }, []);
 
   const handleSearch = (filters) => {
-    let results = jobs;
+    setLoading(true);
     
-    if (filters.q) {
-      const query = filters.q.toLowerCase();
-      results = results.filter(job => 
-        job.title.toLowerCase().includes(query) || 
-        job.company.toLowerCase().includes(query) ||
-        job.tags.some(tag => tag.toLowerCase().includes(query))
-      );
-    }
-    
-    if (filters.location) {
-      const locationQuery = filters.location.toLowerCase();
-      results = results.filter(job => 
-        job.location.toLowerCase().includes(locationQuery)
-      );
-    }
-    
-    if (filters.jobType) {
-      results = results.filter(job => job.type === filters.jobType);
-    }
-    
-    setFilteredJobs(results);
+    // Prepare query for API with ALL filters
+    const query = {};
+    if (filters.q) query.q = filters.q;
+    if (filters.location) query.location = filters.location;
+    if (filters.jobType) query.jobType = filters.jobType;
+
+    console.log("Search filters:", filters); // Debug log
+    console.log("API query:", query); // Debug log
+
+    fetchJobs(query).then(results => {
+      console.log("Search results:", results); // Debug log
+      setFilteredJobs(results);
+      setDisplayCount(3);
+      setLoading(false);
+    });
   };
 
   const handleApply = (job) => {
     setSelectedJob(job);
     setShowApply(true);
   };
+
+  const handleViewAll = () => {
+    setDisplayCount(prevCount => prevCount + 3);
+  };
+
+  const jobsToDisplay = filteredJobs.slice(0, displayCount);
+
+  if (loading) {
+    return <div className="text-center py-5">Loading jobs...</div>;
+  }
 
   return (
     <div className="home-page" style={{ paddingBottom: '2rem' }}>
@@ -97,48 +111,70 @@ export default function Home() {
           </Row>
           
           <JobList 
-            jobs={filteredJobs} 
+            jobs={jobsToDisplay} 
             onSelectJob={setSelectedJob}
             onApply={handleApply}
           />
           
-          <Row className="mt-4">
-            <Col className="text-center">
-              <Button variant="outline-primary">View All Jobs</Button>
+          {filteredJobs.length > displayCount && (
+            <Row className="mt-4">
+              <Col className="text-center">
+                <Button variant="outline-primary" onClick={handleViewAll}>
+                  View More Jobs
+                </Button>
+              </Col>
+            </Row>
+          )}
+          
+          {filteredJobs.length === 0 && !loading && (
+            <Row className="mt-4">
+              <Col className="text-center">
+                <p className="text-muted">No jobs found matching your search criteria.</p>
+                <Button 
+                  variant="outline-secondary" 
+                  onClick={() => {
+                    fetchJobs().then(jobs => {
+                      setFilteredJobs(jobs);
+                      setDisplayCount(3);
+                    });
+                  }}
+                >
+                  Show All Jobs
+                </Button>
+              </Col>
+            </Row>
+          )}
+        </Container>
+      </section>
+
+      {/* Stats Section */}
+      <section
+        className="py-4"
+        style={{
+          backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 90%)`,
+          transition: "background-color 0.5s ease",
+        }}
+      >
+        <Container>
+          <Row>
+            <Col xs={4} className="text-center mb-3">
+              <WorkOutlineIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+              <h5 className="fw-bold">10,000+</h5>
+              <p className="text-muted small">Jobs</p>
+            </Col>
+            <Col xs={4} className="text-center mb-3">
+              <BusinessIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+              <h5 className="fw-bold">5,000+</h5>
+              <p className="text-muted small">Companies</p>
+            </Col>
+            <Col xs={4} className="text-center mb-3">
+              <PeopleAltIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+              <h5 className="fw-bold">50,000+</h5>
+              <p className="text-muted small">Users</p>
             </Col>
           </Row>
         </Container>
       </section>
-
-     {/* Stats Section */}
-<section
-  className="py-4"
-  style={{
-    backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 90%)`,
-    transition: "background-color 0.5s ease",
-  }}
->
-  <Container>
-    <Row>
-      <Col xs={4} className="text-center mb-3">
-        <WorkOutlineIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-        <h5 className="fw-bold">10,000+</h5>
-        <p className="text-muted small">Jobs</p>
-      </Col>
-      <Col xs={4} className="text-center mb-3">
-        <BusinessIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-        <h5 className="fw-bold">5,000+</h5>
-        <p className="text-muted small">Companies</p>
-      </Col>
-      <Col xs={4} className="text-center mb-3">
-        <PeopleAltIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-        <h5 className="fw-bold">50,000+</h5>
-        <p className="text-muted small">Users</p>
-      </Col>
-    </Row>
-  </Container>
-</section>
-
 
       {/* Apply Modal */}
       <ApplyModal

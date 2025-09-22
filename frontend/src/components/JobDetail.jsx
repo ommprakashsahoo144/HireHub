@@ -54,8 +54,8 @@ export default function JobDetail({ job: propJob, onBack, onApply }) {
             
             <div className="d-flex flex-wrap gap-2 mb-4">
               <Badge bg="primary" className="px-3 py-2">{job.type}</Badge>
-              {job.remote && <Badge bg="success" className="px-3 py-2">Remote</Badge>}
-              <Badge bg="secondary" className="px-3 py-2">{job.level}</Badge>
+              {job.location.toLowerCase().includes('remote') && <Badge bg="success" className="px-3 py-2">Remote</Badge>}
+              {job.level && <Badge bg="secondary" className="px-3 py-2">{job.level}</Badge>}
             </div>
 
             <div className="d-flex flex-wrap gap-1 mb-4">
@@ -112,7 +112,7 @@ export default function JobDetail({ job: propJob, onBack, onApply }) {
             
             <div className="mb-3">
               <strong>Posted Date:</strong>
-              <div className="text-muted">March 15, 2023</div>
+              <div className="text-muted">{job.postedAt}</div>
             </div>
             
             <div className="mb-3">

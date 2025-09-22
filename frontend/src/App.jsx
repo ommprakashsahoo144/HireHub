@@ -11,6 +11,10 @@ import RegisterCompany from "./pages/RegisterCompany";
 import NotFound from "./pages/NotFound";
 import JobsPage from "./pages/JobsPage";
 import JobDetail from "./components/JobDetail";
+import Career from "./pages/Career";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
+
 
 export default function App() {
   return (
@@ -26,6 +30,9 @@ export default function App() {
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/career" element={<Career />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </div>
       <Footer />

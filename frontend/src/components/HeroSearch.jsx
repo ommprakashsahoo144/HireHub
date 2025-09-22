@@ -14,6 +14,13 @@ export default function HeroSearch({ onSearch }) {
     onSearch({ q, location, jobType });
   };
 
+  const handleClear = () => {
+    setQ("");
+    setLocation("");
+    setJobType("");
+    onSearch({ q: "", location: "", jobType: "" });
+  };
+
   return (
     <section className="hero-search py-4" style={{ backgroundColor: "#f8f9fa" }}>
       <Container>
@@ -51,7 +58,7 @@ export default function HeroSearch({ onSearch }) {
                     <WorkOutlineIcon fontSize="small" />
                   </InputGroup.Text>
                   <Form.Select value={jobType} onChange={e => setJobType(e.target.value)}>
-                    <option value="">Job Type</option>
+                    <option value="">All Job Types</option>
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
                     <option value="Contract">Contract</option>
@@ -60,9 +67,14 @@ export default function HeroSearch({ onSearch }) {
                   </Form.Select>
                 </InputGroup>
               </Col>
-              <Col md={2}>
+              <Col md={1}>
                 <Button variant="primary" type="submit" className="w-100">
                   Search
+                </Button>
+              </Col>
+              <Col md={1}>
+                <Button variant="outline-secondary" onClick={handleClear} className="w-100">
+                  Clear
                 </Button>
               </Col>
             </Row>
