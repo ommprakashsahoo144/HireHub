@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import JobCard from "./JobCard";
-import { fetchJobs } from "../api/mockApi";
 
-export default function JobList({ jobs: initialJobs = [], onSelectJob, onApply }) {
-  const [jobs, setJobs] = useState(initialJobs);
-  const [loading, setLoading] = useState(!initialJobs.length);
-
-  useEffect(() => {
-    // Only fetch jobs if no initial jobs are provided
-    if (!initialJobs.length) {
-      fetchJobs().then(jobsData => {
-        setJobs(jobsData);
-        setLoading(false);
-      });
-    } else {
-      setLoading(false);
-    }
-  }, [initialJobs]);
-
+export default function JobList({ jobs = [], onSelectJob, onApply }) {
   const handleJobSelect = (job) => {
     if (onSelectJob) {
       onSelectJob(job);
     }
   };
 
-  if (loading) {
+  if (!jobs.length) {
     return (
       <Container>
         <div className="text-center py-4">
-          <p>Loading jobs...</p>
+          <p className="text-muted">No jobs found.</p>
         </div>
       </Container>
     );
@@ -47,11 +31,6 @@ export default function JobList({ jobs: initialJobs = [], onSelectJob, onApply }
             />
           </Col>
         ))}
-        {jobs.length === 0 && !loading && (
-          <Col className="text-center">
-            <p className="text-muted">No jobs found.</p>
-          </Col>
-        )}
       </Row>
     </Container>
   );
