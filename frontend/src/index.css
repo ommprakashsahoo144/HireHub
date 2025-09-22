@@ -117,3 +117,85 @@ body {
 html, body {
   overflow-x: hidden;
 }
+
+/* Responsive adjustments for mobile */
+@media (max-width: 576px) {
+  .container.py-5 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  .card {
+    margin: 0.5rem;
+    padding: 1.5rem !important;
+    box-shadow: none !important;
+    border: 1px solid #dee2e6;
+  }
+  
+  .btn-lg {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* OTP input styling */
+.form-control:read-only.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Countdown timer */
+.text-muted, .text-danger {
+  font-size: 0.875rem;
+}
+
+/* Button loading state */
+.btn:disabled {
+  opacity: 0.7;
+}
+
+/* Success checkmark */
+.position-absolute.text-success {
+  z-index: 5;
+}
+
+/* Password requirements tooltip */
+.password-tooltip-custom {
+  max-width: 250px !important;
+  opacity: 1 !important;
+}
+
+.password-tooltip-custom .tooltip-inner {
+  text-align: left;
+  padding: 10px;
+  background-color: #fff;
+  color: #212529;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.password-req-indicator {
+  font-size: 0.75rem;
+  display: inline-block;
+  margin-right: 12px;
+  margin-bottom: 4px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.password-req-indicator.text-success {
+  opacity: 1;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .password-req-indicator {
+    display: block;
+    margin-right: 0;
+  }
+  
+  .card {
+    margin: 0.5rem;
+    padding: 1.5rem !important;
+  }
+}

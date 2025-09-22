@@ -1,10 +1,20 @@
 // routes/auth.js
 const express = require('express');
-const { register, login, forgotPassword, verifyOTP, resetPassword } = require('../controllers/authController');
+const { 
+  register, 
+  login, 
+  forgotPassword, 
+  verifyOTP, 
+  resetPassword,
+  sendSignupOTP,
+  verifySignupOTP 
+} = require('../controllers/authController');
 const { validateRegistration, validateLogin } = require('../middleware/validation');
 
 const router = express.Router();
 
+router.post('/send-signup-otp', sendSignupOTP);
+router.post('/verify-signup-otp', verifySignupOTP);
 router.post('/register', validateRegistration, register);
 router.post('/login', validateLogin, login);
 router.post('/forgot-password', forgotPassword);
