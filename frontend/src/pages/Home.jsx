@@ -110,28 +110,35 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-4">
-        <Container>
-          <Row>
-            <Col xs={4} className="text-center mb-3">
-              <WorkOutlineIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-              <h5 className="fw-bold">10,000+</h5>
-              <p className="text-muted small">Jobs</p>
-            </Col>
-            <Col xs={4} className="text-center mb-3">
-              <BusinessIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-              <h5 className="fw-bold">5,000+</h5>
-              <p className="text-muted small">Companies</p>
-            </Col>
-            <Col xs={4} className="text-center mb-3">
-              <PeopleAltIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
-              <h5 className="fw-bold">50,000+</h5>
-              <p className="text-muted small">Users</p>
-            </Col>
-          </Row>
-        </Container>
-      </section>
+     {/* Stats Section */}
+<section
+  className="py-4"
+  style={{
+    backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 90%)`,
+    transition: "background-color 0.5s ease",
+  }}
+>
+  <Container>
+    <Row>
+      <Col xs={4} className="text-center mb-3">
+        <WorkOutlineIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+        <h5 className="fw-bold">10,000+</h5>
+        <p className="text-muted small">Jobs</p>
+      </Col>
+      <Col xs={4} className="text-center mb-3">
+        <BusinessIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+        <h5 className="fw-bold">5,000+</h5>
+        <p className="text-muted small">Companies</p>
+      </Col>
+      <Col xs={4} className="text-center mb-3">
+        <PeopleAltIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+        <h5 className="fw-bold">50,000+</h5>
+        <p className="text-muted small">Users</p>
+      </Col>
+    </Row>
+  </Container>
+</section>
+
 
       {/* Apply Modal */}
       <ApplyModal
