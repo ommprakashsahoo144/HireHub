@@ -1,5 +1,6 @@
-// small mock dataset to populate UI immediately
+// Enhanced job data with diverse categories
 const jobs = [
+  // IT & Software Jobs
   {
     id: "1",
     title: "Frontend Engineer",
@@ -8,491 +9,258 @@ const jobs = [
     type: "Full-time",
     level: "Mid-level",
     salary: "₹8,00,000 - ₹12,00,000",
-    postedAt: "2025-09-01",
+    category: "IT",
     tags: ["React", "JavaScript", "CSS"],
-    description:
-      "We are looking for a Frontend Engineer experienced with React, TypeScript (bonus), and modern CSS.",
-    logo: "/assets/logos/acme.png"
+    description: "We are looking for a Frontend Engineer experienced with React and modern CSS.",
   },
   {
     id: "2",
-    title: "Backend Engineer (Node.js)",
-    company: "HireHub Inc",
+    title: "Backend Developer",
+    company: "Tech Solutions",
     location: "Remote",
     type: "Full-time",
     level: "Senior",
     salary: "₹10,00,000 - ₹18,00,000",
-    postedAt: "2025-08-28",
-    tags: ["Node.js", "Express", "MongoDB"],
-    description:
-      "Design and build scalable REST APIs, work with MongoDB and implement authentication & role-based access."
+    category: "IT",
+    tags: ["Node.js", "Python", "MongoDB"],
+    description: "Join our backend team to build scalable APIs and services.",
   },
   {
     id: "3",
-    title: "UI/UX Designer",
-    company: "Emergent Studios",
-    location: "Mumbai, India",
-    type: "Contract",
+    title: "DevOps Engineer",
+    company: "CloudTech",
+    location: "Hyderabad, India",
+    type: "Full-time",
     level: "Mid-level",
-    salary: "₹40,000 - ₹70,000 / month",
-    postedAt: "2025-09-10",
-    tags: ["Figma", "Design System", "Prototyping"],
-    description:
-      "Design end-to-end user experiences for our B2B products. Strong portfolio required."
+    salary: "₹9,00,000 - ₹15,00,000",
+    category: "IT",
+    tags: ["AWS", "Docker", "Kubernetes"],
+    description: "Manage our cloud infrastructure and deployment pipelines.",
   },
+
+  // Marketing Jobs
   {
     id: "4",
-    title: "Full Stack Developer",
-    company: "TechSolutions Ltd",
-    location: "Delhi, India",
+    title: "Digital Marketing Manager",
+    company: "BrandBoost",
+    location: "Mumbai, India",
     type: "Full-time",
     level: "Senior",
-    salary: "₹12,00,000 - ₹20,00,000",
-    postedAt: "2025-09-05",
-    tags: ["React", "Node.js", "MongoDB", "AWS"],
-    description:
-      "Looking for a Full Stack Developer to build end-to-end features for our SaaS platform."
+    salary: "₹6,00,000 - ₹10,00,000",
+    category: "Marketing",
+    tags: ["SEO", "Social Media", "Google Ads"],
+    description: "Lead our digital marketing campaigns and strategy.",
   },
   {
     id: "5",
-    title: "Data Scientist",
-    company: "Analytics Pro",
+    title: "Content Marketing Specialist",
+    company: "Content Kings",
     location: "Remote",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹15,00,000 - ₹25,00,000",
-    postedAt: "2025-09-12",
-    tags: ["Python", "Machine Learning", "SQL", "TensorFlow"],
-    description:
-      "Join our data science team to build predictive models and analyze large datasets."
+    type: "Part-time",
+    level: "Entry-level",
+    salary: "₹3,00,000 - ₹5,00,000",
+    category: "Marketing",
+    tags: ["Content Writing", "Blogging", "SEO"],
+    description: "Create engaging content for our blog and social media.",
   },
+
+  // Sales Jobs
   {
     id: "6",
-    title: "DevOps Engineer",
-    company: "CloudTech Solutions",
-    location: "Hyderabad, India",
+    title: "Sales Executive",
+    company: "SalesPro",
+    location: "Delhi, India",
     type: "Full-time",
     level: "Mid-level",
-    salary: "₹9,00,000 - ₹16,00,000",
-    postedAt: "2025-09-03",
-    tags: ["AWS", "Docker", "Kubernetes", "CI/CD"],
-    description:
-      "Manage cloud infrastructure and implement DevOps practices across our engineering teams."
+    salary: "₹4,00,000 + Commission",
+    category: "Sales",
+    tags: ["B2B Sales", "CRM", "Negotiation"],
+    description: "Drive sales and build client relationships.",
   },
   {
     id: "7",
-    title: "Product Manager",
-    company: "Innovate Labs",
+    title: "Account Manager",
+    company: "Enterprise Solutions",
     location: "Bangalore, India",
     type: "Full-time",
     level: "Senior",
-    salary: "₹18,00,000 - ₹30,00,000",
-    postedAt: "2025-09-08",
-    tags: ["Product Strategy", "Agile", "User Research"],
-    description:
-      "Lead product development from conception to launch for our mobile applications."
+    salary: "₹8,00,000 + Bonus",
+    category: "Sales",
+    tags: ["Account Management", "Client Relations"],
+    description: "Manage key accounts and ensure client satisfaction.",
   },
+
+  // Healthcare Jobs
   {
     id: "8",
-    title: "Mobile App Developer",
-    company: "AppWorks Inc",
-    location: "Remote",
+    title: "Registered Nurse",
+    company: "City Hospital",
+    location: "Chennai, India",
     type: "Full-time",
     level: "Mid-level",
-    salary: "₹10,00,000 - ₹17,00,000",
-    postedAt: "2025-09-15",
-    tags: ["React Native", "iOS", "Android", "JavaScript"],
-    description:
-      "Develop cross-platform mobile applications using React Native for our growing user base."
+    salary: "₹4,00,000 - ₹6,00,000",
+    category: "Healthcare",
+    tags: ["Nursing", "Patient Care", "Medical"],
+    description: "Provide quality nursing care to patients.",
   },
   {
     id: "9",
-    title: "QA Engineer",
-    company: "Quality First Tech",
+    title: "Medical Representative",
+    company: "PharmaCorp",
     location: "Pune, India",
     type: "Full-time",
-    level: "Junior",
-    salary: "₹5,00,000 - ₹8,00,000",
-    postedAt: "2025-09-07",
-    tags: ["Testing", "Automation", "Selenium", "Jest"],
-    description:
-      "Ensure software quality through manual and automated testing methodologies."
+    level: "Entry-level",
+    salary: "₹3,00,000 + Incentives",
+    category: "Healthcare",
+    tags: ["Pharmaceuticals", "Sales", "Healthcare"],
+    description: "Promote pharmaceutical products to healthcare professionals.",
   },
+
+  // Finance Jobs
   {
     id: "10",
-    title: "Technical Writer",
-    company: "DocuTech",
-    location: "Remote",
-    type: "Part-time",
+    title: "Financial Analyst",
+    company: "Wealth Managers",
+    location: "Mumbai, India",
+    type: "Full-time",
     level: "Mid-level",
-    salary: "₹30,000 - ₹50,000 / month",
-    postedAt: "2025-09-14",
-    tags: ["Documentation", "Technical Writing", "API Docs"],
-    description:
-      "Create comprehensive documentation for our developer tools and APIs."
+    salary: "₹7,00,000 - ₹12,00,000",
+    category: "Finance",
+    tags: ["Financial Modeling", "Excel", "Analysis"],
+    description: "Analyze financial data and prepare reports.",
   },
   {
     id: "11",
-    title: "Salesforce Developer",
-    company: "CRM Experts",
-    location: "Chennai, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹11,00,000 - ₹19,00,000",
-    postedAt: "2025-09-06",
-    tags: ["Salesforce", "Apex", "Lightning", "CRM"],
-    description:
-      "Customize and develop Salesforce solutions for enterprise clients."
-  },
-  {
-    id: "12",
-    title: "Cyber Security Analyst",
-    company: "SecureNet Systems",
-    location: "Gurgaon, India",
+    title: "Accountant",
+    company: "Tax Solutions",
+    location: "Delhi, India",
     type: "Full-time",
     level: "Mid-level",
-    salary: "₹12,00,000 - ₹20,00,000",
-    postedAt: "2025-09-09",
-    tags: ["Security", "Network", "Penetration Testing", "SIEM"],
-    description:
-      "Protect our systems from security threats and implement security best practices."
+    salary: "₹5,00,000 - ₹8,00,000",
+    category: "Finance",
+    tags: ["Accounting", "Tally", "GST"],
+    description: "Handle accounting and tax preparation for clients.",
+  },
+
+  // HR Jobs
+  {
+    id: "12",
+    title: "HR Recruiter",
+    company: "Talent Hunt",
+    location: "Hyderabad, India",
+    type: "Full-time",
+    level: "Mid-level",
+    salary: "₹4,00,000 - ₹6,00,000",
+    category: "HR",
+    tags: ["Recruitment", "Talent Acquisition", "HR"],
+    description: "Source and recruit candidates for various positions.",
   },
   {
     id: "13",
-    title: "Business Analyst",
-    company: "Strategy Partners",
-    location: "Mumbai, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹8,00,000 - ₹14,00,000",
-    postedAt: "2025-09-11",
-    tags: ["Requirements", "Analysis", "SQL", "UML"],
-    description:
-      "Bridge the gap between business stakeholders and technical teams."
-  },
-  {
-    id: "14",
-    title: "Cloud Architect",
-    company: "AWS Partners",
-    location: "Remote",
+    title: "HR Manager",
+    company: "Corporate Solutions",
+    location: "Bangalore, India",
     type: "Full-time",
     level: "Senior",
-    salary: "₹20,00,000 - ₹35,00,000",
-    postedAt: "2025-09-13",
-    tags: ["AWS", "Architecture", "Microservices", "Serverless"],
-    description:
-      "Design and implement scalable cloud infrastructure solutions on AWS."
+    salary: "₹10,00,000 - ₹15,00,000",
+    category: "HR",
+    tags: ["HR Management", "Employee Relations", "Policy"],
+    description: "Oversee all HR functions and employee relations.",
+  },
+
+  // Engineering Jobs
+  {
+    id: "14",
+    title: "Mechanical Engineer",
+    company: "AutoTech",
+    location: "Chennai, India",
+    type: "Full-time",
+    level: "Mid-level",
+    salary: "₹6,00,000 - ₹9,00,000",
+    category: "Engineering",
+    tags: ["CAD", "Design", "Manufacturing"],
+    description: "Design and develop mechanical components.",
   },
   {
     id: "15",
-    title: "React Native Developer",
-    company: "MobileFirst Tech",
-    location: "Bangalore, India",
-    type: "Contract",
-    level: "Mid-level",
-    salary: "₹60,000 - ₹90,000 / month",
-    postedAt: "2025-09-16",
-    tags: ["React Native", "Redux", "Firebase", "TypeScript"],
-    description:
-      "Build performant mobile apps on iOS and Android using React Native."
+    title: "Civil Engineer",
+    company: "BuildRight Constructions",
+    location: "Mumbai, India",
+    type: "Full-time",
+    level: "Senior",
+    salary: "₹8,00,000 - ₹12,00,000",
+    category: "Engineering",
+    tags: ["Construction", "Project Management", "Civil"],
+    description: "Manage construction projects and ensure quality standards.",
   },
+
+  // Design Jobs
   {
     id: "16",
-    title: "Python Django Developer",
-    company: "WebSolutions Inc",
-    location: "Hyderabad, India",
+    title: "UI/UX Designer",
+    company: "Design Studio",
+    location: "Remote",
     type: "Full-time",
     level: "Mid-level",
-    salary: "₹9,00,000 - ₹15,00,000",
-    postedAt: "2025-09-04",
-    tags: ["Python", "Django", "REST API", "PostgreSQL"],
-    description:
-      "Develop robust backend systems using Django framework for web applications."
+    salary: "₹6,00,000 - ₹10,00,000",
+    category: "Design",
+    tags: ["Figma", "UI Design", "UX Research"],
+    description: "Create beautiful and user-friendly interfaces.",
   },
   {
     id: "17",
-    title: "Vue.js Developer",
-    company: "Frontend Masters",
-    location: "Remote",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹8,00,000 - ₹13,00,000",
-    postedAt: "2025-09-17",
-    tags: ["Vue.js", "JavaScript", "Vuex", "Vue Router"],
-    description:
-      "Create interactive user interfaces using Vue.js for our client projects."
+    title: "Graphic Designer",
+    company: "Creative Agency",
+    location: "Delhi, India",
+    type: "Part-time",
+    level: "Entry-level",
+    salary: "₹2,50,000 - ₹4,00,000",
+    category: "Design",
+    tags: ["Photoshop", "Illustrator", "Branding"],
+    description: "Design marketing materials and branding assets.",
   },
+
+  // Education Jobs
   {
     id: "18",
-    title: "Machine Learning Engineer",
-    company: "AI Innovations",
-    location: "Bangalore, India",
+    title: "Mathematics Teacher",
+    company: "Bright Future School",
+    location: "Pune, India",
     type: "Full-time",
-    level: "Senior",
-    salary: "₹16,00,000 - ₹28,00,000",
-    postedAt: "2025-09-18",
-    tags: ["Python", "TensorFlow", "PyTorch", "MLOps"],
-    description:
-      "Build and deploy machine learning models for real-world applications."
+    level: "Mid-level",
+    salary: "₹4,00,000 - ₹6,00,000",
+    category: "Education",
+    tags: ["Teaching", "Mathematics", "Education"],
+    description: "Teach mathematics to high school students.",
   },
+
+  // Hospitality Jobs
   {
     id: "19",
-    title: "Flutter Developer",
-    company: "CrossPlatform Apps",
-    location: "Pune, India",
+    title: "Hotel Manager",
+    company: "Grand Hotels",
+    location: "Goa, India",
     type: "Full-time",
-    level: "Mid-level",
-    salary: "₹10,00,000 - ₹16,00,000",
-    postedAt: "2025-09-19",
-    tags: ["Flutter", "Dart", "Firebase", "REST API"],
-    description:
-      "Develop beautiful cross-platform mobile applications using Flutter."
+    level: "Senior",
+    salary: "₹8,00,000 - ₹12,00,000",
+    category: "Hospitality",
+    tags: ["Hotel Management", "Customer Service"],
+    description: "Manage hotel operations and ensure guest satisfaction.",
   },
+
+  // Legal Jobs
   {
     id: "20",
-    title: "Java Spring Boot Developer",
-    company: "Enterprise Solutions",
-    location: "Delhi, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹11,00,000 - ₹18,00,000",
-    postedAt: "2025-09-20",
-    tags: ["Java", "Spring Boot", "Microservices", "Hibernate"],
-    description:
-      "Build enterprise-grade applications using Spring Boot and microservices architecture."
-  },
-  {
-    id: "21",
-    title: "Angular Developer",
-    company: "WebTech Solutions",
-    location: "Chennai, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹8,00,000 - ₹14,00,000",
-    postedAt: "2025-09-21",
-    tags: ["Angular", "TypeScript", "RxJS", "NgRx"],
-    description:
-      "Develop single-page applications using Angular framework for enterprise clients."
-  },
-  {
-    id: "22",
-    title: "Blockchain Developer",
-    company: "Crypto Tech",
-    location: "Remote",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹18,00,000 - ₹32,00,000",
-    postedAt: "2025-09-22",
-    tags: ["Solidity", "Ethereum", "Smart Contracts", "Web3"],
-    description:
-      "Build decentralized applications and smart contracts on blockchain platforms."
-  },
-  {
-    id: "23",
-    title: "Product Manager",
-    company: "Innovate Labs",
-    location: "Bangalore, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹18,00,000 - ₹30,00,000",
-    postedAt: "2025-09-08",
-    tags: ["Product Strategy", "Agile", "User Research"],
-    description:
-      "Lead product development from conception to launch for our mobile applications."
-  },
-  {
-    id: "24",
-    title: "Backend Engineer (Node.js)",
-    company: "HireHub Inc",
-    location: "Remote",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹10,00,000 - ₹18,00,000",
-    postedAt: "2025-08-28",
-    tags: ["Node.js", "Express", "MongoDB"],
-    description:
-      "Design and build scalable REST APIs, work with MongoDB and implement authentication & role-based access."
-  },
-  {
-    id: "25",
-    title: "Backend Developer",
-    company: "Tech Corp",
-    location: "Remote",
-    type: "Full-time",
-    description: "Backend development with Node.js...",
-    salary: "₹8,00,000 - ₹12,00,000",
-    tags: ["Node.js", "Express", "MongoDB", "Backend"],
-    level: "Mid-level"
-  },
-
-  {
-    id: "26",
-    title: "Frontend Engineer",
-    company: "Acme Corp",
-    location: "Bangalore, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹8,00,000 - ₹12,00,000",
-    postedAt: "2025-09-01",
-    tags: ["React", "JavaScript", "CSS"],
-    description: "We are looking for a Frontend Engineer experienced with React, TypeScript (bonus), and modern CSS.",
-    logo: "/assets/logos/acme.png"
-  },
-  {
-    id: "27",
-    title: "Backend Engineer (Node.js)",
-    company: "HireHub Inc",
-    location: "Remote",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹10,00,000 - ₹18,00,000",
-    postedAt: "2025-08-28",
-    tags: ["Node.js", "Express", "MongoDB"],
-    description: "Design and build scalable REST APIs, work with MongoDB and implement authentication & role-based access."
-  },
-  {
-    id: "28",
-    title: "UI/UX Designer",
-    company: "Emergent Studios",
+    title: "Corporate Lawyer",
+    company: "Legal Eagles",
     location: "Mumbai, India",
-    type: "Contract",
-    level: "Mid-level",
-    salary: "₹40,000 - ₹70,000 / month",
-    postedAt: "2025-09-10",
-    tags: ["Figma", "Design System", "Prototyping"],
-    description: "Design end-to-end user experiences for our B2B products. Strong portfolio required."
-  },
-  {
-    id: "29",
-    title: "Frontend Engineer",
-    company: "TechMahindra",
-    location: "Pune, India",
     type: "Full-time",
     level: "Senior",
-    salary: "₹12,00,000 - ₹18,00,000",
-    postedAt: "2025-09-05",
-    tags: ["Angular", "TypeScript", "RxJS", "HTML5"],
-    description: "Senior frontend developer needed for enterprise application development using Angular framework.",
-    logo: "/assets/logos/techmahindra.png"
-  },
-  {
-    id: "30",
-    title: "Frontend Engineer",
-    company: "Infosys",
-    location: "Hyderabad, India",
-    type: "Full-time",
-    level: "Junior",
-    salary: "₹5,00,000 - ₹8,00,000",
-    postedAt: "2025-09-12",
-    tags: ["React", "JavaScript", "CSS", "Bootstrap"],
-    description: "Entry-level frontend position with training provided. Freshers with good coding skills are welcome.",
-    logo: "/assets/logos/infosys.png"
-  },
-  {
-    id: "31",
-    title: "Backend Engineer (Node.js)",
-    company: "Wipro Technologies",
-    location: "Chennai, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹9,00,000 - ₹15,00,000",
-    postedAt: "2025-09-08",
-    tags: ["Node.js", "Express", "MySQL", "REST API"],
-    description: "Develop server-side logic and database integration for web applications. 3+ years experience required.",
-    logo: "/assets/logos/wipro.png"
-  },
-  {
-    id: "32",
-    title: "Backend Engineer (Node.js)",
-    company: "TCS",
-    location: "Delhi, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹14,00,000 - ₹22,00,000",
-    postedAt: "2025-09-15",
-    tags: ["Node.js", "Microservices", "MongoDB", "Docker"],
-    description: "Architect and build scalable microservices for banking applications. Team lead experience preferred.",
-    logo: "/assets/logos/tcs.png"
-  },
-  {
-    id: "33",
-    title: "UI/UX Designer",
-    company: "HCL Technologies",
-    location: "Noida, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹15,00,000 - ₹20,00,000",
-    postedAt: "2025-09-03",
-    tags: ["Figma", "Adobe XD", "User Research", "Prototyping"],
-    description: "Lead UX designer for digital transformation projects. Must have experience with enterprise applications.",
-    logo: "/assets/logos/hcl.png"
-  },
-  {
-    id: "34",
-    title: "UI/UX Designer",
-    company: "Mindtree",
-    location: "Bengaluru, India",
-    type: "Contract",
-    level: "Mid-level",
-    salary: "₹45,000 - ₹65,000 / month",
-    postedAt: "2025-09-18",
-    tags: ["Sketch", "InVision", "Wireframing", "UI Design"],
-    description: "Contract UI/UX designer needed for 6-month project focusing on mobile app redesign.",
-    logo: "/assets/logos/mindtree.png"
-  },
-  {
-    id: "35",
-    title: "Frontend Engineer",
-    company: "Flipkart",
-    location: "Bangalore, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹20,00,000 - ₹30,00,000",
-    postedAt: "2025-09-20",
-    tags: ["React", "Redux", "Next.js", "TypeScript"],
-    description: "Build high-performance e-commerce frontend for millions of users. Prior e-commerce experience preferred.",
-    logo: "/assets/logos/flipkart.png"
-  },
-  {
-    id: "36",
-    title: "Backend Engineer (Node.js)",
-    company: "Ola Cabs",
-    location: "Bengaluru, India",
-    type: "Full-time",
-    level: "Senior",
-    salary: "₹18,00,000 - ₹28,00,000",
-    postedAt: "2025-09-22",
-    tags: ["Node.js", "GraphQL", "PostgreSQL", "AWS"],
-    description: "Develop backend systems for ride-sharing platform handling high transaction volumes.",
-    logo: "/assets/logos/ola.png"
-  },
-  {
-    id: "37",
-    title: "UI/UX Designer",
-    company: "Zomato",
-    location: "Gurgaon, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹10,00,000 - ₹16,00,000",
-    postedAt: "2025-09-25",
-    tags: ["Figma", "Prototyping", "User Testing", "Mobile Design"],
-    description: "Design user experiences for food delivery app serving millions of customers across India.",
-    logo: "/assets/logos/zomato.png"
-  },
-  {
-    id: "38",
-    title: "Frontend Engineer",
-    company: "Paytm",
-    location: "Noida, India",
-    type: "Full-time",
-    level: "Mid-level",
-    salary: "₹12,00,000 - ₹18,00,000",
-    postedAt: "2025-09-28",
-    tags: ["Vue.js", "JavaScript", "CSS3", "Webpack"],
-    description: "Frontend developer for financial services platform. Experience with Vue.js framework required.",
-    logo: "/assets/logos/paytm.png"
+    salary: "₹15,00,000 - ₹25,00,000",
+    category: "Legal",
+    tags: ["Corporate Law", "Legal Advisory"],
+    description: "Provide legal counsel for corporate matters.",
   }
-
 ];
 
 export default jobs;

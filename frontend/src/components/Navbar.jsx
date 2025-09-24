@@ -22,6 +22,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import BusinessIcon from "@mui/icons-material/Business";
+import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -29,23 +31,27 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [userType, setUserType] = useState('jobseeker'); // 'jobseeker' or 'recruiter'
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    // Check if user is logged in
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
+    const savedUserType = localStorage.getItem("userType");
     
     if (token) {
       setIsLoggedIn(true);
       if (userData) {
         setUser(JSON.parse(userData));
       }
+      if (savedUserType) {
+        setUserType(savedUserType);
+      }
     } else {
       setIsLoggedIn(false);
       setUser(null);
     }
-  }, [location]); // Re-run when location changes to update login status
+  }, [location]);
 
   const handleBrand = () => navigate("/");
   
@@ -65,17 +71,16 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    // Clear local storage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("userType");
     
-    // Update state
     setIsLoggedIn(false);
     setUser(null);
+    setUserType('jobseeker');
     handleMenuClose();
     
-    // Redirect to login page
-    navigate("/login");
+    navigate("/");
   };
 
   const handleProfile = () => {
@@ -83,18 +88,23 @@ export default function Navbar() {
     navigate("/profile");
   };
 
+  const handleUserTypeSelect = (type) => {
+    setUserType(type);
+    localStorage.setItem("userType", type);
+    if (!isLoggedIn) {
+      navigate(type === 'jobseeker' ? '/login' : '/recruiter-login');
+    }
+  };
+
   const menuItems = isLoggedIn
     ? [
         { text: 'Home', path: '/' },
         { text: 'Jobs', path: '/jobs' },
-        { text: 'Post Job', path: '/register-company' },
+        { text: userType === 'recruiter' ? 'Post Job' : 'My Applications', path: userType === 'recruiter' ? '/post-job' : '/my-applications' },
       ]
     : [
         { text: 'Home', path: '/' },
         { text: 'Jobs', path: '/jobs' },
-        { text: 'Post Job', path: '/register-company' },
-        { text: 'Login', path: '/login' },
-        { text: 'Sign Up', path: '/signup' },
       ];
 
   const drawerList = () => (
@@ -126,6 +136,50 @@ export default function Navbar() {
           <CloseIcon />
         </IconButton>
       </Box>
+      
+      {/* User Type Selection */}
+      {!isLoggedIn && (
+        <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <Typography variant="subtitle2" sx={{ mb: 1, color: '#4fc3f7' }}>
+            I am a:
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button 
+              variant={userType === 'jobseeker' ? 'contained' : 'outlined'}
+              size="small"
+              onClick={() => handleUserTypeSelect('jobseeker')}
+              sx={{ 
+                flex: 1,
+                backgroundColor: userType === 'jobseeker' ? '#4fc3f7' : 'transparent',
+                borderColor: '#4fc3f7',
+                color: userType === 'jobseeker' ? 'white' : '#4fc3f7',
+                '&:hover': {
+                  backgroundColor: userType === 'jobseeker' ? '#29b6f6' : 'rgba(79, 195, 247, 0.1)'
+                }
+              }}
+            >
+              Jobseeker
+            </Button>
+            <Button 
+              variant={userType === 'recruiter' ? 'contained' : 'outlined'}
+              size="small"
+              onClick={() => handleUserTypeSelect('recruiter')}
+              sx={{ 
+                flex: 1,
+                backgroundColor: userType === 'recruiter' ? '#4fc3f7' : 'transparent',
+                borderColor: '#4fc3f7',
+                color: userType === 'recruiter' ? 'white' : '#4fc3f7',
+                '&:hover': {
+                  backgroundColor: userType === 'recruiter' ? '#29b6f6' : 'rgba(79, 195, 247, 0.1)'
+                }
+              }}
+            >
+              Recruiter
+            </Button>
+          </Box>
+        </Box>
+      )}
+
       <List sx={{ py: 2 }}>
         {menuItems.map((item) => (
           <ListItem 
@@ -151,7 +205,43 @@ export default function Navbar() {
             />
           </ListItem>
         ))}
-        {isLoggedIn && (
+        
+        {!isLoggedIn ? (
+          <>
+            <ListItem 
+              button 
+              component={Link} 
+              to={userType === 'jobseeker' ? '/login' : '/recruiter-login'}
+              sx={{ 
+                py: 1.5,
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                backgroundColor: location.pathname.includes('/login') ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                },
+                color: location.pathname.includes('/login') ? '#4fc3f7' : 'white'
+              }}
+            >
+              <ListItemText primary="Login" />
+            </ListItem>
+            <ListItem 
+              button 
+              component={Link} 
+              to={userType === 'jobseeker' ? '/signup' : '/recruiter-signup'}
+              sx={{ 
+                py: 1.5,
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                backgroundColor: location.pathname.includes('/signup') ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                },
+                color: location.pathname.includes('/signup') ? '#4fc3f7' : 'white'
+              }}
+            >
+              <ListItemText primary="Sign Up" />
+            </ListItem>
+          </>
+        ) : (
           <ListItem 
             button 
             onClick={handleLogout}
@@ -218,7 +308,45 @@ export default function Navbar() {
           </Box>
 
           {/* Desktop Nav Links */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 0.5, alignItems: "center" }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1, alignItems: "center" }}>
+            {/* User Type Selection for non-logged in users */}
+            {!isLoggedIn && (
+              <Box sx={{ display: 'flex', gap: 0.5, mr: 2 }}>
+                <Button 
+                  variant={userType === 'jobseeker' ? 'contained' : 'outlined'}
+                  size="small"
+                  onClick={() => handleUserTypeSelect('jobseeker')}
+                  startIcon={<PersonIcon />}
+                  sx={{ 
+                    backgroundColor: userType === 'jobseeker' ? '#4fc3f7' : 'transparent',
+                    borderColor: '#4fc3f7',
+                    color: userType === 'jobseeker' ? 'white' : '#4fc3f7',
+                    '&:hover': {
+                      backgroundColor: userType === 'jobseeker' ? '#29b6f6' : 'rgba(79, 195, 247, 0.1)'
+                    }
+                  }}
+                >
+                  Jobseeker
+                </Button>
+                <Button 
+                  variant={userType === 'recruiter' ? 'contained' : 'outlined'}
+                  size="small"
+                  onClick={() => handleUserTypeSelect('recruiter')}
+                  startIcon={<BusinessIcon />}
+                  sx={{ 
+                    backgroundColor: userType === 'recruiter' ? '#4fc3f7' : 'transparent',
+                    borderColor: '#4fc3f7',
+                    color: userType === 'recruiter' ? 'white' : '#4fc3f7',
+                    '&:hover': {
+                      backgroundColor: userType === 'recruiter' ? '#29b6f6' : 'rgba(79, 195, 247, 0.1)'
+                    }
+                  }}
+                >
+                  Recruiter
+                </Button>
+              </Box>
+            )}
+
             <Button 
               color="inherit" 
               component={Link} 
@@ -257,37 +385,57 @@ export default function Navbar() {
             >
               Jobs
             </Button>
-            <Button 
-              color="inherit" 
-              component={Link} 
-              to="/register-company" 
-              size="small"
-              sx={{ 
-                color: location.pathname === '/register-company' ? '#4fc3f7' : 'white',
-                backgroundColor: location.pathname === '/register-company' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
-                fontWeight: location.pathname === '/register-company' ? 600 : 400,
-                borderRadius: 2,
-                px: 2,
-                py: 1,
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
-              }}
-            >
-              Post Job
-            </Button>
             
             {isLoggedIn ? (
               <>
+                {userType === 'recruiter' ? (
+                  <Button 
+                    color="inherit" 
+                    component={Link} 
+                    to="/post-job" 
+                    size="small"
+                    sx={{ 
+                      color: location.pathname === '/post-job' ? '#4fc3f7' : 'white',
+                      backgroundColor: location.pathname === '/post-job' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                      fontWeight: location.pathname === '/post-job' ? 600 : 400,
+                      borderRadius: 2,
+                      px: 2,
+                      py: 1,
+                      '&:hover': {
+                        backgroundColor: 'rgba(255,255,255,0.1)'
+                      }
+                    }}
+                  >
+                    Post Job
+                  </Button>
+                ) : (
+                  <Button 
+                    color="inherit" 
+                    component={Link} 
+                    to="/my-applications" 
+                    size="small"
+                    sx={{ 
+                      color: location.pathname === '/my-applications' ? '#4fc3f7' : 'white',
+                      backgroundColor: location.pathname === '/my-applications' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                      fontWeight: location.pathname === '/my-applications' ? 600 : 400,
+                      borderRadius: 2,
+                      px: 2,
+                      py: 1,
+                      '&:hover': {
+                        backgroundColor: 'rgba(255,255,255,0.1)'
+                      }
+                    }}
+                  >
+                    My Applications
+                  </Button>
+                )}
+                
                 <IconButton color="inherit" sx={{ ml: 1 }}>
                   <Badge badgeContent={3} color="error">
                     <NotificationsNoneIcon />
                   </Badge>
                 </IconButton>
-                <IconButton
-                  onClick={handleMenuOpen}
-                  sx={{ ml: 1 }}
-                >
+                <IconButton onClick={handleMenuOpen} sx={{ ml: 1 }}>
                   <Avatar sx={{ 
                     width: 36, 
                     height: 36, 
@@ -334,6 +482,9 @@ export default function Navbar() {
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                           {user.email}
                         </Typography>
+                        <Typography variant="caption" sx={{ color: 'primary.main' }}>
+                          {userType === 'recruiter' ? 'Recruiter' : 'Jobseeker'}
+                        </Typography>
                       </Box>
                     </MenuItem>
                   )}
@@ -353,7 +504,7 @@ export default function Navbar() {
                   variant="outlined"
                   color="inherit"
                   component={Link}
-                  to="/login"
+                  to={userType === 'jobseeker' ? '/login' : '/recruiter-login'}
                   size="small"
                   sx={{ 
                     ml: 1,
@@ -374,7 +525,7 @@ export default function Navbar() {
                   color="primary"
                   variant="contained"
                   component={Link}
-                  to="/signup"
+                  to={userType === 'jobseeker' ? '/signup' : '/recruiter-signup'}
                   size="small"
                   sx={{ 
                     ml: 1,

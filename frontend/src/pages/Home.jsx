@@ -13,8 +13,15 @@ export default function Home() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showApply, setShowApply] = useState(false);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [displayCount, setDisplayCount] = useState(3);
+  const [displayCount, setDisplayCount] = useState(6);
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check authentication
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   // Load initial jobs
   useEffect(() => {
@@ -27,13 +34,10 @@ export default function Home() {
   const handleSearch = (filters) => {
     setLoading(true);
     
-    // Prepare query for API with ALL filters
     const query = {};
     if (filters.q) query.q = filters.q;
     
-    // Enhanced location handling for multiple locations
     if (filters.location) {
-      // Split by comma and clean up the locations
       const locations = filters.location.split(',')
         .map(loc => loc.trim())
         .filter(loc => loc.length > 0);
@@ -44,25 +48,27 @@ export default function Home() {
     }
     
     if (filters.jobType) query.jobType = filters.jobType;
-
-    console.log("Search filters:", filters); // Debug log
-    console.log("API query with multiple locations:", query); // Debug log
+    if (filters.category) query.category = filters.category;
 
     fetchJobs(query).then(results => {
-      console.log("Search results:", results); // Debug log
       setFilteredJobs(results);
-      setDisplayCount(3);
+      setDisplayCount(6);
       setLoading(false);
     });
   };
 
   const handleApply = (job) => {
+    if (!isLoggedIn) {
+      // Redirect to login if not authenticated
+      window.location.href = '/login';
+      return;
+    }
     setSelectedJob(job);
     setShowApply(true);
   };
 
   const handleViewAll = () => {
-    setDisplayCount(prevCount => prevCount + 3);
+    setDisplayCount(prevCount => prevCount + 6);
   };
 
   const jobsToDisplay = filteredJobs.slice(0, displayCount);
@@ -73,34 +79,31 @@ export default function Home() {
 
   return (
     <div className="home-page" style={{ paddingBottom: '2rem' }}>
-      {/* Hero Section */}
+      {/* Hero Section - Smaller */}
       <section 
-        className="py-4"
+        className="py-3"
         style={{
           background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
           color: "white"
         }}
       >
         <Container>
-          <Row className="align-items-center" style={{ minHeight: '60vh' }}>
+          <Row className="align-items-center" style={{ minHeight: '30vh' }}>
             <Col md={6} className="text-center text-md-start">
-              <h1 className="fw-bold mb-3" style={{ fontSize: "2.2rem" }}>
+              <h1 className="fw-bold mb-2" style={{ fontSize: "1.8rem" }}>
                 Find Your Dream Job with <span style={{ color: "#ffd54f" }}>HireHub</span>
               </h1>
-              <p className="lead mb-4" style={{ fontSize: "1.1rem" }}>
+              <p className="mb-3" style={{ fontSize: "1rem" }}>
                 Discover thousands of job opportunities from top companies worldwide. 
-                Whether you're looking for remote work or onsite positions, we've got you covered.
+                Search across all industries and locations.
               </p>
-              <Button variant="light" size="lg" className="mb-4">
-                Get Started
-              </Button>
             </Col>
             <Col md={6} className="text-center d-none d-md-block">
               <img 
                 src="https://cdn.pixabay.com/photo/2016/12/05/10/55/application-1883554_1280.jpg" 
                 alt="Job Search" 
                 className="img-fluid rounded shadow"
-                style={{ maxHeight: "300px" }}
+                style={{ maxHeight: "200px" }}
               />
             </Col>
           </Row>
@@ -110,12 +113,36 @@ export default function Home() {
       {/* Search Section */}
       <HeroSearch onSearch={handleSearch} />
 
+      {/* Quick Categories */}
+      <section className="py-3 bg-light">
+        <Container>
+          <Row>
+            <Col>
+              <h5 className="text-center mb-3">Browse by Category</h5>
+              <div className="d-flex flex-wrap justify-content-center gap-2">
+                {['IT & Software', 'Marketing', 'Sales', 'Healthcare', 'Finance', 'HR', 'Engineering', 'Design'].map(category => (
+                  <Button 
+                    key={category}
+                    variant="outline-primary" 
+                    size="sm"
+                    onClick={() => handleSearch({ category })}
+                    className="mb-2"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
       {/* Featured Jobs Section */}
-      <section className="py-4 bg-light">
+      <section className="py-4">
         <Container>
           <Row className="mb-4">
             <Col>
-              <h2 className="text-center mb-3">Featured Jobs</h2>
+              <h2 className="text-center mb-2">Featured Jobs</h2>
               <p className="text-muted text-center">
                 Browse through our most recent job openings from top companies
               </p>
@@ -147,7 +174,7 @@ export default function Home() {
                   onClick={() => {
                     fetchJobs().then(jobs => {
                       setFilteredJobs(jobs);
-                      setDisplayCount(3);
+                      setDisplayCount(6);
                     });
                   }}
                 >
