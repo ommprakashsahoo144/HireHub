@@ -13,12 +13,23 @@ export function fetchJobs(query = {}) {
     );
   }
   
-  // Search by location
+  // Enhanced location search - handle both single string and array of locations
   if (query.location) {
-    const locationQuery = query.location.toLowerCase();
-    out = out.filter(j => 
-      j.location && j.location.toLowerCase().includes(locationQuery)
-    );
+    if (Array.isArray(query.location)) {
+      // Multiple locations: search for jobs in ANY of the specified locations
+      const locationQueries = query.location.map(loc => loc.toLowerCase());
+      out = out.filter(j => 
+        j.location && locationQueries.some(locQuery => 
+          j.location.toLowerCase().includes(locQuery)
+        )
+      );
+    } else {
+      // Single location: backward compatibility
+      const locationQuery = query.location.toLowerCase();
+      out = out.filter(j => 
+        j.location && j.location.toLowerCase().includes(locationQuery)
+      );
+    }
   }
   
   // Search by job type

@@ -30,11 +30,23 @@ export default function Home() {
     // Prepare query for API with ALL filters
     const query = {};
     if (filters.q) query.q = filters.q;
-    if (filters.location) query.location = filters.location;
+    
+    // Enhanced location handling for multiple locations
+    if (filters.location) {
+      // Split by comma and clean up the locations
+      const locations = filters.location.split(',')
+        .map(loc => loc.trim())
+        .filter(loc => loc.length > 0);
+      
+      if (locations.length > 0) {
+        query.location = locations;
+      }
+    }
+    
     if (filters.jobType) query.jobType = filters.jobType;
 
     console.log("Search filters:", filters); // Debug log
-    console.log("API query:", query); // Debug log
+    console.log("API query with multiple locations:", query); // Debug log
 
     fetchJobs(query).then(results => {
       console.log("Search results:", results); // Debug log
