@@ -116,23 +116,22 @@ export default function Home() {
 
   return (
     <div className="home-page" style={{ paddingBottom: '2rem' }}>
-      {/* Hero Section */}
+      {/* Hero Section - Smaller Size */}
       <section 
-        className="py-2"
+        className="py-3"
         style={{
           background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
           color: "white"
         }}
       >
         <Container fluid="md">
-          <Row className="align-items-center" style={{ minHeight: '20vh' }}>
+          <Row className="align-items-center" style={{ minHeight: '15vh' }}>
             <Col md={6} className="text-center text-md-start">
-              <h1 className="fw-bold mb-2" style={{ fontSize: "1.5rem" }}>
+              <h1 className="fw-bold mb-2" style={{ fontSize: "1.8rem" }}>
                 Find Your Dream Job with <span style={{ color: "#ffd54f" }}>HireHub</span>
               </h1>
-              <p className="mb-3" style={{ fontSize: "0.9rem" }}>
-                Discover thousands of job opportunities from top companies worldwide. 
-                Search across all industries and locations.
+              <p className="mb-3" style={{ fontSize: "0.9rem", opacity: 0.9 }}>
+                Discover thousands of job opportunities from top companies worldwide.
               </p>
             </Col>
             <Col md={6} className="text-center d-none d-md-block">
@@ -140,7 +139,7 @@ export default function Home() {
                 src="https://cdn.pixabay.com/photo/2016/12/05/10/55/application-1883554_1280.jpg" 
                 alt="Job Search" 
                 className="img-fluid rounded shadow"
-                style={{ maxHeight: "150px" }}
+                style={{ maxHeight: "120px", objectFit: "cover", width: "100%" }}
               />
             </Col>
           </Row>
@@ -167,7 +166,7 @@ export default function Home() {
         <Container>
           <Row>
             <Col>
-              <h5 className="text-center mb-3">Browse by Category</h5>
+              <h5 className="text-center mb-3 fw-bold text-primary">Browse by Category</h5>
               <div className="d-flex flex-wrap justify-content-center gap-2">
                 {uniqueCategories.map(category => (
                   <Button 
@@ -175,33 +174,15 @@ export default function Home() {
                     variant="outline-primary" 
                     size="sm"
                     onClick={() => handleCategorySearch(category)}
-                    className="mb-2"
+                    className="px-3 py-2 rounded-pill category-btn"
+                    style={{
+                      borderWidth: "2px",
+                      fontWeight: "600",
+                      transition: "all 0.3s ease",
+                      fontSize: "0.85rem"
+                    }}
                   >
                     {category}
-                  </Button>
-                ))}
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      {/* Popular Locations */}
-      <section className="py-3">
-        <Container>
-          <Row>
-            <Col>
-              <h5 className="text-center mb-3">Popular Locations</h5>
-              <div className="d-flex flex-wrap justify-content-center gap-2">
-                {uniqueLocations.map(location => (
-                  <Button 
-                    key={location}
-                    variant="outline-secondary" 
-                    size="sm"
-                    onClick={() => handleSearch({ location })}
-                    className="mb-2"
-                  >
-                    {location}
                   </Button>
                 ))}
               </div>
@@ -213,9 +194,9 @@ export default function Home() {
       {/* Featured Jobs Section */}
       <section className="py-4">
         <Container>
-          <Row className="mb-4">
+          <Row className="mb-3">
             <Col>
-              <h2 className="text-center mb-2">
+              <h2 className="text-center mb-2 fw-bold">
                 {Object.keys(searchFilters).length > 0 ? 'Search Results' : 'Featured Jobs'}
               </h2>
               <p className="text-muted text-center">
@@ -236,7 +217,11 @@ export default function Home() {
           {filteredJobs.length > displayCount && (
             <Row className="mt-4">
               <Col className="text-center">
-                <Button variant="outline-primary" onClick={handleViewAll}>
+                <Button 
+                  variant="outline-primary" 
+                  onClick={handleViewAll}
+                  className="px-4 py-2"
+                >
                   View More Jobs
                 </Button>
               </Col>
@@ -246,7 +231,7 @@ export default function Home() {
           {filteredJobs.length === 0 && !loading && (
             <Row className="mt-4">
               <Col className="text-center">
-                <p className="text-muted">No jobs found matching your search criteria.</p>
+                <p className="text-muted mb-3">No jobs found matching your search criteria.</p>
                 <Button 
                   variant="outline-secondary" 
                   onClick={handleShowAllJobs}
@@ -269,18 +254,18 @@ export default function Home() {
       >
         <Container>
           <Row>
-            <Col xs={4} className="text-center mb-3">
-              <WorkOutlineIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+            <Col xs={4} className="text-center mb-2">
+              <WorkOutlineIcon sx={{ fontSize: 35, color: "#1976d2", mb: 1 }} />
               <h5 className="fw-bold">{allJobs.length}+</h5>
               <p className="text-muted small">Jobs</p>
             </Col>
-            <Col xs={4} className="text-center mb-3">
-              <BusinessIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+            <Col xs={4} className="text-center mb-2">
+              <BusinessIcon sx={{ fontSize: 35, color: "#1976d2", mb: 1 }} />
               <h5 className="fw-bold">{[...new Set(allJobs.map(job => job.company))].length}+</h5>
               <p className="text-muted small">Companies</p>
             </Col>
-            <Col xs={4} className="text-center mb-3">
-              <PeopleAltIcon sx={{ fontSize: 40, color: "#1976d2", mb: 1 }} />
+            <Col xs={4} className="text-center mb-2">
+              <PeopleAltIcon sx={{ fontSize: 35, color: "#1976d2", mb: 1 }} />
               <h5 className="fw-bold">50,000+</h5>
               <p className="text-muted small">Users</p>
             </Col>
@@ -294,6 +279,25 @@ export default function Home() {
         onHide={() => setShowApply(false)}
         job={selectedJob}
       />
+
+      <style jsx>{`
+        .category-btn:hover {
+          background-color: #1976d2;
+          color: white;
+          transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+          .home-page {
+            padding-bottom: 1rem;
+          }
+          
+          .category-btn {
+            font-size: 0.8rem !important;
+            padding: 0.4rem 0.8rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

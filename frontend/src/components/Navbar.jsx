@@ -26,6 +26,7 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import BusinessIcon from "@mui/icons-material/Business";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import EmailIcon from "@mui/icons-material/Email";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -92,6 +93,14 @@ export default function Navbar() {
     navigate("/profile");
   };
 
+  const handleDashboard = () => {
+    handleMenuClose();
+    setDrawerOpen(false);
+    if (userType === 'recruiter') {
+      navigate("/recruiter/dashboard");
+    }
+  };
+
   const handleUserTypeSelect = (type) => {
     setUserType(type);
     localStorage.setItem("userType", type);
@@ -101,16 +110,25 @@ export default function Navbar() {
     }
   };
 
+  // Updated menu items based on user type
   const menuItems = isLoggedIn
-    ? [
-        { text: 'Home', path: '/' },
-        { text: 'Jobs', path: '/jobs' },
-        { text: userType === 'recruiter' ? 'Post Job' : 'My Applications', path: userType === 'recruiter' ? '/post-job' : '/my-applications' },
-        { text: 'Profile', path: '/profile' },
-      ]
+    ? userType === 'recruiter'
+      ? [
+          { text: 'Home', path: '/', icon: <PersonIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Jobs', path: '/jobs', icon: <WorkHistoryIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Recruiter Dashboard', path: '/recruiter/dashboard', icon: <DashboardIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Post Job', path: '/post-job', icon: <WorkOutlineIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Profile', path: '/profile', icon: <PersonIcon sx={{ mr: 1.5 }} /> },
+        ]
+      : [
+          { text: 'Home', path: '/', icon: <PersonIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Jobs', path: '/jobs', icon: <WorkHistoryIcon sx={{ mr: 1.5 }} /> },
+          { text: 'My Applications', path: '/my-applications', icon: <WorkOutlineIcon sx={{ mr: 1.5 }} /> },
+          { text: 'Profile', path: '/profile', icon: <PersonIcon sx={{ mr: 1.5 }} /> },
+        ]
     : [
-        { text: 'Home', path: '/' },
-        { text: 'Jobs', path: '/jobs' },
+        { text: 'Home', path: '/', icon: <PersonIcon sx={{ mr: 1.5 }} /> },
+        { text: 'Jobs', path: '/jobs', icon: <WorkHistoryIcon sx={{ mr: 1.5 }} /> },
       ];
 
   const drawerList = () => (
@@ -247,6 +265,7 @@ export default function Navbar() {
                 color: location.pathname === item.path ? '#4fc3f7' : 'white'
               }}
             >
+              {item.icon}
               <ListItemText 
                 primary={item.text} 
                 primaryTypographyProps={{ 
@@ -446,26 +465,49 @@ export default function Navbar() {
             
             {isLoggedIn ? (
               <>
+                {/* Recruiter Specific Links */}
                 {userType === 'recruiter' ? (
-                  <Button 
-                    color="inherit" 
-                    component={Link} 
-                    to="/post-job" 
-                    size="small"
-                    sx={{ 
-                      color: location.pathname === '/post-job' ? '#4fc3f7' : 'white',
-                      backgroundColor: location.pathname === '/post-job' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
-                      fontWeight: location.pathname === '/post-job' ? 600 : 400,
-                      borderRadius: 2,
-                      px: 2,
-                      py: 1,
-                      '&:hover': {
-                        backgroundColor: 'rgba(255,255,255,0.1)'
-                      }
-                    }}
-                  >
-                    Post Job
-                  </Button>
+                  <>
+                    <Button 
+                      color="inherit" 
+                      component={Link} 
+                      to="/recruiter/dashboard" 
+                      size="small"
+                      startIcon={<DashboardIcon />}
+                      sx={{ 
+                        color: location.pathname === '/recruiter/dashboard' ? '#4fc3f7' : 'white',
+                        backgroundColor: location.pathname === '/recruiter/dashboard' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                        fontWeight: location.pathname === '/recruiter/dashboard' ? 600 : 400,
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1,
+                        '&:hover': {
+                          backgroundColor: 'rgba(255,255,255,0.1)'
+                        }
+                      }}
+                    >
+                      Dashboard
+                    </Button>
+                    <Button 
+                      color="inherit" 
+                      component={Link} 
+                      to="/post-job" 
+                      size="small"
+                      sx={{ 
+                        color: location.pathname === '/post-job' ? '#4fc3f7' : 'white',
+                        backgroundColor: location.pathname === '/post-job' ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                        fontWeight: location.pathname === '/post-job' ? 600 : 400,
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1,
+                        '&:hover': {
+                          backgroundColor: 'rgba(255,255,255,0.1)'
+                        }
+                      }}
+                    >
+                      Post Job
+                    </Button>
+                  </>
                 ) : (
                   <Button 
                     color="inherit" 
@@ -547,6 +589,12 @@ export default function Navbar() {
                     </MenuItem>
                   )}
                   <Divider />
+                  {userType === 'recruiter' && (
+                    <MenuItem onClick={handleDashboard} sx={{ py: 1.5 }}>
+                      <DashboardIcon sx={{ mr: 1.5, fontSize: 20, color: 'primary.main' }} />
+                      Dashboard
+                    </MenuItem>
+                  )}
                   <MenuItem onClick={handleProfile} sx={{ py: 1.5 }}>
                     <PersonIcon sx={{ mr: 1.5, fontSize: 20, color: 'primary.main' }} />
                     Profile
@@ -622,7 +670,7 @@ export default function Navbar() {
                     border: '2px solid rgba(255,255,255,0.3)',
                     cursor: 'pointer'
                   }}
-                  onClick={handleProfile}
+                  onClick={userType === 'recruiter' ? handleDashboard : handleProfile}
                 >
                   {user?.name ? user.name.charAt(0).toUpperCase() : <PersonIcon />}
                 </Avatar>
