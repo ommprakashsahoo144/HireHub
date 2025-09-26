@@ -1,18 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import CategoryIcon from "@mui/icons-material/Category";
 
-export default function HeroSearch({ onSearch }) {
+export default function HeroSearch({ onSearch, onPopularSearch }) {
   const [q, setQ] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("");
   const [category, setCategory] = useState("");
 
+  // Auto-search when any filter changes (with debounce)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (q || location || jobType || category) {
+        submit();
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [q, location, jobType, category]);
+
   const submit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     onSearch({ q, location, jobType, category });
   };
 
@@ -21,12 +34,27 @@ export default function HeroSearch({ onSearch }) {
     setLocation("");
     setJobType("");
     setCategory("");
+    // Trigger search with empty filters immediately
     onSearch({ q: "", location: "", jobType: "", category: "" });
+  };
+
+  const handlePopularSearchClick = (searchTerm) => {
+    setQ(searchTerm);
+    // Don't need to call submit() here because useEffect will trigger it
+  };
+
+  const handleCategoryClick = (cat) => {
+    setCategory(cat);
+    // Don't need to call submit() here because useEffect will trigger it
   };
 
   const popularSearches = [
     "Software Engineer", "Marketing Manager", "Sales Executive", 
     "HR Recruiter", "Data Analyst", "Graphic Designer", "Accountant"
+  ];
+
+  const quickCategories = [
+    "IT", "Marketing", "Sales", "Healthcare", "Finance", "HR", "Engineering", "Design"
   ];
 
   return (
@@ -106,8 +134,24 @@ export default function HeroSearch({ onSearch }) {
             </Row>
           </Form>
           
-          {/* Popular Searches */}
+          {/* Quick Categories */}
           <div className="mt-3">
+            <small className="text-muted">Quick categories: </small>
+            {quickCategories.map((cat, index) => (
+              <Button
+                key={index}
+                variant="link"
+                size="sm"
+                className="text-decoration-none p-0 ms-2"
+                onClick={() => handleCategoryClick(cat)}
+              >
+                {cat === 'IT' ? 'IT & Software' : cat}
+              </Button>
+            ))}
+          </div>
+          
+          {/* Popular Searches */}
+          <div className="mt-2">
             <small className="text-muted">Popular searches: </small>
             {popularSearches.map((search, index) => (
               <Button
@@ -115,10 +159,7 @@ export default function HeroSearch({ onSearch }) {
                 variant="link"
                 size="sm"
                 className="text-decoration-none p-0 ms-2"
-                onClick={() => {
-                  setQ(search);
-                  setTimeout(() => submit({ preventDefault: () => {} }), 100);
-                }}
+                onClick={() => handlePopularSearchClick(search)}
               >
                 {search}
               </Button>

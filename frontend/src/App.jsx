@@ -13,6 +13,9 @@ import JobDetail from "./components/JobDetail";
 import Career from "./pages/Career";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import RecruiterLogin from './pages/RecruiterLogin';
+import RecruiterSignup from './pages/RecruiterSignup';
+import RecruiterDashboard from './pages/RecruiterDashboard';
 
 
 export default function App() {
@@ -31,6 +34,9 @@ export default function App() {
           <Route path="/career" element={<Career />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/recruiter-login" element={<RecruiterLogin />} />
+          <Route path="/recruiter-signup" element={<RecruiterSignup />} />
+          <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
         </Routes>
       </div>
       <Footer />

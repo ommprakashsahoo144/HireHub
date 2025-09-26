@@ -14,7 +14,8 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Badge
+  Badge,
+  Divider
 } from "@mui/material";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -24,6 +25,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import BusinessIcon from "@mui/icons-material/Business";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
+import EmailIcon from "@mui/icons-material/Email";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [userType, setUserType] = useState('jobseeker'); // 'jobseeker' or 'recruiter'
+  const [userType, setUserType] = useState('jobseeker');
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
@@ -79,18 +81,21 @@ export default function Navbar() {
     setUser(null);
     setUserType('jobseeker');
     handleMenuClose();
+    setDrawerOpen(false);
     
     navigate("/");
   };
 
   const handleProfile = () => {
     handleMenuClose();
+    setDrawerOpen(false);
     navigate("/profile");
   };
 
   const handleUserTypeSelect = (type) => {
     setUserType(type);
     localStorage.setItem("userType", type);
+    setDrawerOpen(false);
     if (!isLoggedIn) {
       navigate(type === 'jobseeker' ? '/login' : '/recruiter-login');
     }
@@ -101,6 +106,7 @@ export default function Navbar() {
         { text: 'Home', path: '/' },
         { text: 'Jobs', path: '/jobs' },
         { text: userType === 'recruiter' ? 'Post Job' : 'My Applications', path: userType === 'recruiter' ? '/post-job' : '/my-applications' },
+        { text: 'Profile', path: '/profile' },
       ]
     : [
         { text: 'Home', path: '/' },
@@ -113,12 +119,13 @@ export default function Navbar() {
         width: 280,
         background: 'linear-gradient(135deg, #1a2a6c 0%, #2a5298 100%)',
         height: '100%',
-        color: 'white'
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column'
       }}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
     >
+      {/* Header */}
       <Box sx={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
@@ -126,7 +133,7 @@ export default function Navbar() {
         p: 2,
         borderBottom: '1px solid rgba(255,255,255,0.1)'
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={handleBrand} style={{cursor: 'pointer'}}>
           <WorkOutlineIcon sx={{ fontSize: 28, color: "#4fc3f7" }} />
           <Typography variant="h6" component="div">
             HireHub
@@ -136,7 +143,46 @@ export default function Navbar() {
           <CloseIcon />
         </IconButton>
       </Box>
-      
+
+      {/* User Info Section - Show when logged in */}
+      {isLoggedIn && user && (
+        <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <Avatar 
+              sx={{ 
+                width: 50, 
+                height: 50, 
+                bgcolor: '#4fc3f7',
+                border: '2px solid rgba(255,255,255,0.3)'
+              }}
+            >
+              {user.name ? user.name.charAt(0).toUpperCase() : <PersonIcon />}
+            </Avatar>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'white' }}>
+                {user.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.8rem' }}>
+                {user.email}
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#4fc3f7' }}>
+                {userType === 'recruiter' ? 'Recruiter' : 'Jobseeker'}
+              </Typography>
+            </Box>
+          </Box>
+          
+          {/* Notifications */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton size="small" sx={{ color: 'white' }}>
+              <Badge badgeContent={3} color="error">
+                <NotificationsNoneIcon />
+              </Badge>
+            </IconButton>
+            <Typography variant="body2">Notifications</Typography>
+          </Box>
+        </Box>
+      )}
+
       {/* User Type Selection */}
       {!isLoggedIn && (
         <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -180,85 +226,97 @@ export default function Navbar() {
         </Box>
       )}
 
-      <List sx={{ py: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem 
-            button 
-            key={item.text} 
-            component={Link} 
-            to={item.path}
-            sx={{ 
-              py: 1.5,
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
-              backgroundColor: location.pathname === item.path ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              },
-              color: location.pathname === item.path ? '#4fc3f7' : 'white'
-            }}
-          >
-            <ListItemText 
-              primary={item.text} 
-              primaryTypographyProps={{ 
-                fontWeight: location.pathname === item.path ? 600 : 400 
-              }} 
-            />
-          </ListItem>
-        ))}
-        
+      {/* Navigation Menu */}
+      <Box sx={{ flex: 1, overflow: 'auto' }}>
+        <List sx={{ py: 1 }}>
+          {menuItems.map((item) => (
+            <ListItem 
+              button 
+              key={item.text} 
+              onClick={() => {
+                navigate(item.path);
+                setDrawerOpen(false);
+              }}
+              sx={{ 
+                py: 1.5,
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                backgroundColor: location.pathname === item.path ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                },
+                color: location.pathname === item.path ? '#4fc3f7' : 'white'
+              }}
+            >
+              <ListItemText 
+                primary={item.text} 
+                primaryTypographyProps={{ 
+                  fontWeight: location.pathname === item.path ? 600 : 400 
+                }} 
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      {/* Auth Section */}
+      <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         {!isLoggedIn ? (
           <>
-            <ListItem 
-              button 
-              component={Link} 
-              to={userType === 'jobseeker' ? '/login' : '/recruiter-login'}
+            <Button 
+              fullWidth
+              variant="outlined"
+              onClick={() => {
+                setDrawerOpen(false);
+                navigate(userType === 'jobseeker' ? '/login' : '/recruiter-login');
+              }}
               sx={{ 
-                py: 1.5,
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                backgroundColor: location.pathname.includes('/login') ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                mb: 1,
+                borderColor: 'rgba(255,255,255,0.3)',
+                color: 'white',
                 '&:hover': {
+                  borderColor: 'white',
                   backgroundColor: 'rgba(255,255,255,0.1)'
-                },
-                color: location.pathname.includes('/login') ? '#4fc3f7' : 'white'
+                }
               }}
             >
-              <ListItemText primary="Login" />
-            </ListItem>
-            <ListItem 
-              button 
-              component={Link} 
-              to={userType === 'jobseeker' ? '/signup' : '/recruiter-signup'}
+              Login
+            </Button>
+            <Button 
+              fullWidth
+              variant="contained"
+              onClick={() => {
+                setDrawerOpen(false);
+                navigate(userType === 'jobseeker' ? '/signup' : '/recruiter-signup');
+              }}
               sx={{ 
-                py: 1.5,
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                backgroundColor: location.pathname.includes('/signup') ? 'rgba(79, 195, 247, 0.15)' : 'transparent',
+                background: 'linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%)',
                 '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                },
-                color: location.pathname.includes('/signup') ? '#4fc3f7' : 'white'
+                  background: 'linear-gradient(135deg, #29b6f6 0%, #03a9f4 100%)'
+                }
               }}
             >
-              <ListItemText primary="Sign Up" />
-            </ListItem>
+              Sign Up
+            </Button>
           </>
         ) : (
-          <ListItem 
-            button 
+          <Button 
+            fullWidth
+            variant="outlined"
+            startIcon={<LogoutIcon />}
             onClick={handleLogout}
             sx={{ 
-              py: 1.5,
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
+              borderColor: '#ff5252',
               color: '#ff5252',
               '&:hover': {
+                borderColor: '#ff5252',
                 backgroundColor: 'rgba(255,82,82,0.1)'
               }
             }}
           >
-            <LogoutIcon sx={{ mr: 2, fontSize: 20 }} />
-            <ListItemText primary="Logout" />
-          </ListItem>
+            Logout
+          </Button>
         )}
-      </List>
+      </Box>
     </Box>
   );
 
@@ -279,7 +337,7 @@ export default function Navbar() {
         <Toolbar sx={{ 
           display: "flex", 
           justifyContent: "space-between", 
-          px: { xs: 2, sm: 3 },
+          px: { xs: 1, sm: 3 },
           py: 1
         }}>
           {/* Brand */}
@@ -292,14 +350,14 @@ export default function Navbar() {
             }}
             onClick={handleBrand}
           >
-            <WorkOutlineIcon sx={{ fontSize: 32, color: "#4fc3f7" }} />
+            <WorkOutlineIcon sx={{ fontSize: { xs: 28, sm: 32 }, color: "#4fc3f7" }} />
             <Typography
               variant="h6"
               component="div"
               sx={{ 
                 fontWeight: "bold", 
                 color: "white",
-                fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                fontSize: { xs: '1.1rem', sm: '1.5rem' },
                 textShadow: '0 2px 4px rgba(0,0,0,0.2)'
               }}
             >
@@ -474,13 +532,13 @@ export default function Navbar() {
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                   {user && (
-                    <MenuItem disabled sx={{ opacity: 1 }}>
+                    <MenuItem disabled sx={{ opacity: 1, py: 2 }}>
                       <Box>
                         <Typography variant="subtitle2" sx={{ color: 'text.primary', fontWeight: 600 }}>
                           {user.name}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                          {user.email}
+                        <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                          <EmailIcon sx={{ fontSize: 14 }} /> {user.email}
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'primary.main' }}>
                           {userType === 'recruiter' ? 'Recruiter' : 'Jobseeker'}
@@ -488,6 +546,7 @@ export default function Navbar() {
                       </Box>
                     </MenuItem>
                   )}
+                  <Divider />
                   <MenuItem onClick={handleProfile} sx={{ py: 1.5 }}>
                     <PersonIcon sx={{ mr: 1.5, fontSize: 20, color: 'primary.main' }} />
                     Profile
@@ -547,15 +606,35 @@ export default function Navbar() {
           </Box>
 
           {/* Mobile Menu Button */}
-          <IconButton
-            sx={{ 
-              display: { xs: "flex", md: "none" },
-              color: 'white'
-            }}
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", gap: 1 }}>
+            {isLoggedIn && (
+              <>
+                <IconButton color="inherit" size="small">
+                  <Badge badgeContent={3} color="error">
+                    <NotificationsNoneIcon />
+                  </Badge>
+                </IconButton>
+                <Avatar 
+                  sx={{ 
+                    width: 32, 
+                    height: 32, 
+                    bgcolor: 'primary.main',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    cursor: 'pointer'
+                  }}
+                  onClick={handleProfile}
+                >
+                  {user?.name ? user.name.charAt(0).toUpperCase() : <PersonIcon />}
+                </Avatar>
+              </>
+            )}
+            <IconButton
+              sx={{ color: 'white' }}
+              onClick={toggleDrawer(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -565,11 +644,6 @@ export default function Navbar() {
         open={drawerOpen}
         onClose={toggleDrawer(false)}
         sx={{ display: { xs: "block", md: "none" } }}
-        PaperProps={{
-          sx: {
-            backgroundColor: 'transparent'
-          }
-        }}
       >
         {drawerList()}
       </Drawer>

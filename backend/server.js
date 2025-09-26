@@ -6,7 +6,9 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
-
+const jobRoutes = require('./routes/jobs');
+const recruiterAuthRoutes = require('./routes/recruiterAuth');
+const recruiterJobRoutes = require('./routes/recruiterJobs');
 const app = express();
 
 // Middleware
@@ -23,6 +25,9 @@ app.use('/uploads/resumes', express.static(path.join(__dirname, 'uploads/resumes
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/recruiter/auth', recruiterAuthRoutes);
+app.use('/api/recruiter/jobs', recruiterJobRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

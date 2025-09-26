@@ -17,11 +17,6 @@ const INDIAN_LOCATIONS = [
   "Gurgaon", "Gurugram", "Noida", "Remote", "Work From Home", "WFH"
 ];
 
-const JOB_CATEGORIES = [
-  "IT & Software", "Marketing", "Sales", "Healthcare", "Finance", 
-  "HR", "Engineering", "Design", "Education", "Hospitality", "Legal"
-];
-
 export default function JobsPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showApply, setShowApply] = useState(false);
@@ -42,7 +37,7 @@ export default function JobsPage() {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Check authentication
+  // Check authentication and load jobs
   useEffect(() => {
     const token = localStorage.getItem("token");
     const savedUserType = localStorage.getItem("userType");
@@ -60,96 +55,39 @@ export default function JobsPage() {
       return;
     }
     
-    fetchJobs().then(jobs => {
-      setAllJobs(jobs);
+    loadJobs();
+  }, [navigate]);
+
+  const loadJobs = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const jobs = await fetchJobs(filters);
+      if (Object.keys(filters).length === 0) {
+        setAllJobs(jobs);
+      }
       setFilteredJobs(jobs);
       setLoading(false);
-    });
-  }, [navigate]);
+    } catch (error) {
+      console.error('Error loading jobs:', error);
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (filters = searchQuery) => {
     setLoading(true);
     setShowSuggestions(false);
     
     const query = {};
-    if (filters.q) query.q = filters.q;
+    if (filters.q && filters.q.trim()) query.q = filters.q.trim();
     
-    if (filters.location) {
-      const locations = filters.location.split(',')
-        .map(loc => loc.trim())
-        .filter(loc => loc.length > 0);
-      
-      if (locations.length > 0) {
-        query.location = locations;
-      }
+    if (filters.location && filters.location.trim()) {
+      query.location = filters.location.trim();
     }
     
     if (filters.jobType) query.jobType = filters.jobType;
     if (filters.category) query.category = filters.category;
 
-    fetchJobs(query).then(results => {
-      const sortedResults = sortJobsByRelevance(results, filters);
-      setFilteredJobs(sortedResults);
-      setLoading(false);
-    });
-  };
-
-  const sortJobsByRelevance = (jobs, filters) => {
-    if (!filters.q && !filters.location && !filters.category) return jobs;
-
-    return jobs.sort((a, b) => {
-      let scoreA = 0;
-      let scoreB = 0;
-
-      // Keyword matching score
-      if (filters.q) {
-        const q = filters.q.toLowerCase();
-        
-        if (a.title.toLowerCase().includes(q)) scoreA += 10;
-        if (b.title.toLowerCase().includes(q)) scoreB += 10;
-        
-        if (a.title.toLowerCase() === q.toLowerCase()) scoreA += 5;
-        if (b.title.toLowerCase() === q.toLowerCase()) scoreB += 5;
-        
-        if (a.company.toLowerCase().includes(q)) scoreA += 5;
-        if (b.company.toLowerCase().includes(q)) scoreB += 5;
-        
-        if (a.tags && a.tags.some(tag => tag.toLowerCase().includes(q))) scoreA += 3;
-        if (b.tags && b.tags.some(tag => tag.toLowerCase().includes(q))) scoreB += 3;
-        
-        if (a.description.toLowerCase().includes(q)) scoreA += 2;
-        if (b.description.toLowerCase().includes(q)) scoreB += 2;
-      }
-
-      // Location matching
-      if (filters.location) {
-        const locations = filters.location.split(',')
-          .map(loc => loc.trim().toLowerCase())
-          .filter(loc => loc.length > 0);
-
-        locations.forEach(loc => {
-          const jobLocation = a.location.toLowerCase();
-          if (jobLocation.includes(loc)) {
-            if (jobLocation === loc) scoreA += 10;
-            else scoreA += 8;
-          }
-          
-          const jobLocationB = b.location.toLowerCase();
-          if (jobLocationB.includes(loc)) {
-            if (jobLocationB === loc) scoreB += 10;
-            else scoreB += 8;
-          }
-        });
-      }
-
-      // Category matching
-      if (filters.category) {
-        if (a.category === filters.category) scoreA += 5;
-        if (b.category === filters.category) scoreB += 5;
-      }
-
-      return scoreB - scoreA;
-    });
+    loadJobs(query);
   };
 
   const handleInputChange = (field, value) => {
@@ -170,20 +108,10 @@ export default function JobsPage() {
   };
 
   const handleLocationSelect = (location) => {
-    const currentLocations = searchQuery.location.split(',')
-      .map(loc => loc.trim())
-      .filter(loc => loc.length > 0);
-    
-    if (!currentLocations.includes(location)) {
-      const newLocations = currentLocations.length > 0 
-        ? [...currentLocations, location].join(', ')
-        : location;
-      
-      setSearchQuery(prev => ({
-        ...prev,
-        location: newLocations
-      }));
-    }
+    setSearchQuery(prev => ({
+      ...prev,
+      location: location
+    }));
     
     setShowSuggestions(false);
   };
@@ -224,8 +152,32 @@ export default function JobsPage() {
     setSelectedJob(null);
   };
 
+  // Handle popular search click
+  const handlePopularSearch = (searchTerm) => {
+    setSearchQuery(prev => ({ ...prev, q: searchTerm }));
+    setTimeout(() => handleSearch({ ...searchQuery, q: searchTerm }), 100);
+  };
+
+  // Handle popular location click
+  const handlePopularLocation = (location) => {
+    setSearchQuery(prev => ({ ...prev, location }));
+    setTimeout(() => handleSearch({ ...searchQuery, location }), 100);
+  };
+
+  // Handle category click
+  const handlePopularCategory = (category) => {
+    setSearchQuery(prev => ({ ...prev, category }));
+    setTimeout(() => handleSearch({ ...searchQuery, category }), 100);
+  };
+
   const uniqueLocations = [...new Set(allJobs.map(job => job.location))].slice(0, 8);
   const uniqueCategories = [...new Set(allJobs.map(job => job.category))].filter(Boolean);
+
+  // Popular searches data
+  const popularSearches = [
+    "Software Engineer", "Marketing Manager", "Sales Executive", 
+    "HR Recruiter", "Data Analyst", "Graphic Designer", "Accountant"
+  ];
 
   if (!isAuthenticated) {
     return (
@@ -361,6 +313,22 @@ export default function JobsPage() {
               </Row>
             </Form>
             
+            {/* Popular Searches */}
+            <div className="mt-3">
+              <small className="text-muted">Popular searches: </small>
+              {popularSearches.map((search, index) => (
+                <Button
+                  key={index}
+                  variant="link"
+                  size="sm"
+                  className="text-decoration-none p-0 ms-2"
+                  onClick={() => handlePopularSearch(search)}
+                >
+                  {search}
+                </Button>
+              ))}
+            </div>
+            
             {/* Quick Filters */}
             <Row className="mt-3">
               <Col md={6}>
@@ -372,10 +340,7 @@ export default function JobsPage() {
                     text="primary"
                     className="me-2 mb-1 cursor-pointer"
                     style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      setSearchQuery(prev => ({ ...prev, location }));
-                      setTimeout(() => handleSearch({ ...searchQuery, location }), 100);
-                    }}
+                    onClick={() => handlePopularLocation(location)}
                   >
                     {location}
                   </Badge>
@@ -390,10 +355,7 @@ export default function JobsPage() {
                     text="success"
                     className="me-2 mb-1 cursor-pointer"
                     style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      setSearchQuery(prev => ({ ...prev, category }));
-                      setTimeout(() => handleSearch({ ...searchQuery, category }), 100);
-                    }}
+                    onClick={() => handlePopularCategory(category)}
                   >
                     {category}
                   </Badge>
