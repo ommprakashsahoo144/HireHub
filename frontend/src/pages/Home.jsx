@@ -128,7 +128,7 @@ export default function Home() {
           <Row className="align-items-center" style={{ minHeight: '15vh' }}>
             <Col md={6} className="text-center text-md-start">
               <h1 className="fw-bold mb-2" style={{ fontSize: "1.8rem" }}>
-                Find Your Dream Job with <span style={{ color: "#ffd54f" }}>HireHub</span>
+                Find Your Dream Job with <span style={{ color: "#ffd54f" }}>MidasMinds</span>
               </h1>
               <p className="mb-3" style={{ fontSize: "0.9rem", opacity: 0.9 }}>
                 Discover thousands of job opportunities from top companies worldwide.
